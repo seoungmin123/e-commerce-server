@@ -1,0 +1,97 @@
+%% 관계 설명
+%% users -- orders           : 사용자 1명은 여러 주문을 할 수 있음 (1:N)
+%% users -- point_histories : 사용자 1명은 여러 포인트 이력을 가질 수 있음 (1:N)
+%% users -- coupon_policies : 사용자 1명은 각 쿠폰 정책당 최대 1개의 쿠폰만 가질 수 있음 (1:1)
+%% users -- coupons : 사용자 1명은 여러 쿠폰을 보유할 수 있지만 쿠폰 정책별로 1개의 쿠폰만 가질 수 있음 (1:N, UNIQUE(user_id, coupon_policy_id))
+%% coupon_policies -- coupons: 쿠폰 정책 1개는 여러 쿠폰을 발급함 (1:N)
+%% orders -- order_items     : 주문 1건에 여러 주문 항목이 포함됨 (1:N)
+%% products -- order_items   : 상품 1개가 여러 주문 항목에 포함될 수 있음 (1:N)
+%% orders -- order_payments  : 주문 1건은 결제 정보 1건과 연결됨 (1:1)
+%% coupons -- order_payments : 쿠폰 1개는 최대 1건의 결제에 사용될 수 있음 (0..1:N)
+
+erDiagram
+
+    users ||--o{ orders : "has (1:N)"
+    users ||--o{ point_histories : "has (1:N)"
+    users ||--o{ coupons : "has (1:N)"
+    coupon_policies ||--o{ coupons : "issues (1:N)"
+    orders ||--o{ order_items : "contains (1:N)"
+    products ||--o{ order_items : "includes (1:N)"
+    orders ||--|| order_payments : "has (1:1)"
+    coupons ||--o| order_payments : "used in (0..1:N)"
+
+    users {
+        BIGINT user_id PK
+        BIGINT point
+        DATETIME created_dt
+        BIGINT version
+    }
+
+    coupon_policies {
+        BIGINT coupon_policy_id PK
+        VARCHAR name
+        BIGINT discount_rate
+        BIGINT issued_total
+        BIGINT issued_remain
+        BIGINT valid_days
+        DATETIME expired_dt
+        BIGINT version
+    }
+
+    coupons {
+        BIGINT coupon_id PK
+        BIGINT coupon_policy_id FK
+        BIGINT user_id FK
+        VARCHAR name
+        BIGINT discount_rate
+        DATETIME issued_dt
+        DATETIME used_dt
+        DATETIME expired_dt
+        BOOLEAN is_used
+    }
+
+    point_histories {
+        BIGINT point_history_id PK
+        BIGINT user_id FK
+        BIGINT amount
+        BIGINT balance_after
+        VARCHAR type
+        DATETIME created_dt
+    }
+
+    products {
+        BIGINT product_id PK
+        VARCHAR name
+        BIGINT price
+        BIGINT stock
+    }
+
+    orders {
+        BIGINT order_id PK
+        BIGINT user_id FK
+        BIGINT total_price
+        VARCHAR status
+        DATETIME ordered_dt
+    }
+
+    order_items {
+        BIGINT order_item_id PK
+        BIGINT order_id FK
+        BIGINT product_id FK
+        BIGINT item_cnt
+        BIGINT unit_price
+        BIGINT total_price
+        VARCHAR status
+        DATETIME ordered_dt
+    }
+
+    order_payments {
+        BIGINT order_payment_id PK
+        BIGINT order_id FK
+        BIGINT coupon_id FK
+        BIGINT original_price
+        BIGINT discount_amount
+        BIGINT final_price
+        DATETIME paid_dt
+    }
+
