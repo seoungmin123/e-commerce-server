@@ -1,4 +1,4 @@
-package kr.hhplus.be.server.app.common.exception;
+package kr.hhplus.be.server.mock.controller.common.exception;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

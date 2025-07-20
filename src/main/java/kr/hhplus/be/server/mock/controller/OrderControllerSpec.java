@@ -7,7 +7,7 @@ import io.swagger.v3.oas.annotations.media.ExampleObject;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import kr.hhplus.be.server.app.common.CommonResponse;
+import kr.hhplus.be.server.mock.controller.common.CommonResponse;
 import kr.hhplus.be.server.mock.controller.dto.MockOrderDto;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;

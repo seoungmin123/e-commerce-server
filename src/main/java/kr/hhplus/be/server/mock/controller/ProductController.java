@@ -1,7 +1,7 @@
 package kr.hhplus.be.server.mock.controller;
 
 
-import kr.hhplus.be.server.app.common.CommonResponse;
+import kr.hhplus.be.server.mock.controller.common.CommonResponse;
 import kr.hhplus.be.server.mock.controller.dto.MockProductDto.PopularProductDto;
 import kr.hhplus.be.server.mock.controller.dto.MockProductDto.ProductResponseDto;
 import org.springframework.web.bind.annotation.*;

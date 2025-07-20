@@ -1,4 +1,4 @@
-package kr.hhplus.be.server.app.common;
+package kr.hhplus.be.server.mock.controller.common;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -15,12 +15,8 @@ public class CommonResponse<T> {
     private boolean success;  // 요청 성공 여부
     private String message;   // 응답 메시지
     private T data;           // 응답 데이터
-    private Integer status;   // HTTP 유사 상태 코드 (Mock용)
+    private Integer status;   // HTTP 상태 코드
 
-    // 성공 응답 생성자
-    public CommonResponse(boolean success, String message, T data) {
-        this(success, message, data, 200);
-    }
 
     /**
      * 성공 응답 반환 (기본 메시지: "성공", 상태 코드: 200)

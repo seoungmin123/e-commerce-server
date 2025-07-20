@@ -1,6 +1,6 @@
 package kr.hhplus.be.server.mock.controller.external;
 
-import kr.hhplus.be.server.app.common.CommonResponse;
+import kr.hhplus.be.server.mock.controller.common.CommonResponse;
 import kr.hhplus.be.server.mock.controller.dto.MockExternalOrderDto;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
