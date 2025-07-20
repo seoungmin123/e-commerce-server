@@ -1,0 +1,127 @@
+classDiagram
+    direction TB
+
+    class User {
+        Long userId
+        Long 보유포인트
+        LocalDateTime 가입일시
+        Long version //Optimistic Lock용
+        +포인트잔액조회(userId)
+        +포인트충전(userId, amount)
+        +포인트차감(userId, amount)
+    }
+
+    class PointHistory {
+        Long pointHistoryId
+        Long userId
+        Long amount
+        Long balanceAfter
+        PointType 타입
+        LocalDateTime 생성일시
+        +포인트이력조회(userId)
+        +포인트이력저장(userId,이력타입,일시,amount, balanceAfter)
+    }
+
+    class Order {
+        Long orderId
+        Long userId
+        Long 결제금액
+        OrderStatus 상태
+        LocalDateTime 주문일시
+        +주문요청(userId, List<OrderItemRequest>, couponId)
+        +결제확인(orderId)
+        +주문내역조회(userId)
+    }
+
+    class OrderItem {
+        Long orderItemId
+        Long orderId
+        Long productId
+        Long item_cnt
+        Long 상품단일가격
+        Long 총가격
+        OrderStatus 상태
+        LocalDateTime 주문일시
+        +주문상세조회(orderId)
+        +인기상품조회(몇개자를지 , 날짜)
+    }
+
+    class OrderPayment {
+        Long orderPaymentId
+        Long orderId
+        Long couponId
+        Long 총_원가_금액
+        Long 할인_금액
+        Long 총_결제_금액
+        LocalDateTime 결제일시
+        +주문결제내역조회(orderId)
+    }
+
+    class Product {
+        Long productId
+        String 상품명
+        Long 가격
+        Long 재고
+        +제품전체조회()
+        +제품상세조회(productId)
+    }
+
+    class CouponPolicy {
+        Long couponPolicyId
+        String 쿠폰명
+        Long 할인율
+        Long 총 발급수량
+        Long 잔여수량
+        Integer 쿠폰유효기간_일수 // 1,7,10일...
+        Long version //Optimistic Lock용
+        +발급가능_여부확인(couponId)
+        -쿠폰발급시_수량감소(couponId)
+        +선착순쿠폰발급(userId)
+         %% 동일 정책에 대해 중복 발급 방지 (userId + couponPolicyId UNIQUE)
+    }
+
+    class Coupon {
+        Long couponId
+        Long CouponPolicyId
+        Long userId
+        String 쿠폰명//최적화용
+        Long 할인율 //최적화용
+        LocalDateTime 발급일시
+        LocalDateTime 사용일시
+        LocalDateTime 만료일시(정책의 유효기간 기준으로 계산)
+        Boolean isUsed
+        +보유쿠폰조회(userId)
+        +쿠폰사용가능조회(userId, couponId)
+    }
+
+    class PointType {
+        <<enumeration>>
+        CHARGE 충전
+        USE 사용
+    }
+
+    class OrderStatus {
+        <<enumeration>>
+        CREATED 주문생성
+        PAID 결제성공
+        COMPLETED 주문완료
+        PAYMENT_FAILED 결제실패
+    }
+
+    class ExternalOrderSender {
+        +send(orderId, userId, totalAmount, List<OrderItem>)
+    }
+
+
+%% 관계
+    User           --> PointHistory : 포인트이력보유
+    User           --> Order        : 주문함
+    Order          --> OrderItem    : 포함함
+    Product        --> OrderItem    : 주문됨
+    Order          --> OrderPayment : 결제관리
+    User           --> Coupon       : 쿠폰보유
+    CouponPolicy   --> Coupon       : 발급됨
+    PointHistory   --> PointType
+    Order          --> OrderStatus : 상태관리
+    Order          --> ExternalOrderSender : 외부전송
+%%OrderItem      --> OrderStatus : 상태관리
