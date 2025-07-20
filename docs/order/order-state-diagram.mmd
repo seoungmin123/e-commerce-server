@@ -1,0 +1,6 @@
+stateDiagram
+    [*] --> CREATED : 재고 확보 & 주문 생성
+    CREATED --> PAID : 쿠폰/포인트 처리 성공
+    PAID --> COMPLETED : 주문 구성 완료
+
+    CREATED --> PAYMENT_FAILED : 포인트 부족, 쿠폰 만료 등
