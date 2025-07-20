@@ -1,9 +1,9 @@
-package kr.hhplus.be.server.controller;
+package kr.hhplus.be.server.mock.controller;
 
-import kr.hhplus.be.server.common.ResponseApi;
-import kr.hhplus.be.server.controller.dto.MockExternalOrderDto;
-import kr.hhplus.be.server.controller.dto.MockOrderDto.*;
-import kr.hhplus.be.server.controller.dto.OrderStatus;
+import kr.hhplus.be.server.app.common.CommonResponse;
+import kr.hhplus.be.server.mock.controller.dto.MockExternalOrderDto;
+import kr.hhplus.be.server.mock.controller.dto.MockOrderDto.*;
+import kr.hhplus.be.server.mock.controller.dto.OrderStatus;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDateTime;
@@ -15,7 +15,7 @@ public class OrderController implements OrderControllerSpec {
 
     /** 주문요청*/
     @PostMapping("/orders")
-    public ResponseApi<OrderSummaryResponseDto> createOrder(@RequestBody OrderRequestDto request) {
+    public CommonResponse<OrderSummaryResponseDto> createOrder(@RequestBody OrderRequestDto request) {
 
         String status = "SUCCESS"; // "FAIL";
         String reason = null; //"쿠폰만료";
@@ -32,7 +32,7 @@ public class OrderController implements OrderControllerSpec {
         );
 
 
-        return ResponseApi.success("주문 완료", new OrderSummaryResponseDto(
+        return CommonResponse.success("주문 완료", new OrderSummaryResponseDto(
                 100L,
                 OrderStatus.COMPLETED,
                 18000
@@ -41,8 +41,8 @@ public class OrderController implements OrderControllerSpec {
 
     /** 주문내역 조회*/
     @GetMapping("/users/{userId}/orders")
-    public ResponseApi<List<UserOrderSummaryDto>> getUserOrders(@PathVariable Long userId) {
-        return ResponseApi.success("성공", List.of(
+    public CommonResponse<List<UserOrderSummaryDto>> getUserOrders(@PathVariable Long userId) {
+        return CommonResponse.success("성공", List.of(
                 new UserOrderSummaryDto(
                         100L,
                         LocalDateTime.of(2025, 7, 17, 16, 0),
@@ -54,8 +54,8 @@ public class OrderController implements OrderControllerSpec {
 
     /** 주문 상세내역 조회*/
     @GetMapping("/orders/{orderId}")
-    public ResponseApi<OrderDetailDto> getOrderDetail(@PathVariable Long orderId) {
-        return ResponseApi.success("성공", new OrderDetailDto(
+    public CommonResponse<OrderDetailDto> getOrderDetail(@PathVariable Long orderId) {
+        return CommonResponse.success("성공", new OrderDetailDto(
                 orderId,
                 LocalDateTime.of(2025, 7, 17, 16, 0),
                 OrderStatus.COMPLETED,
@@ -69,8 +69,8 @@ public class OrderController implements OrderControllerSpec {
 
     /** 주문결제 내역 조회*/
     @GetMapping("/orders/{orderId}/payment")
-    public ResponseApi<OrderPaymentDto> getOrderPayment(@PathVariable Long orderId) {
-        return ResponseApi.success("성공", new OrderPaymentDto(
+    public CommonResponse<OrderPaymentDto> getOrderPayment(@PathVariable Long orderId) {
+        return CommonResponse.success("성공", new OrderPaymentDto(
                 20L,
                 5L,
                 20000,

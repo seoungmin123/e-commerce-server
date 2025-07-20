@@ -1,4 +1,4 @@
-package kr.hhplus.be.server.controller.dto;
+package kr.hhplus.be.server.mock.controller.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

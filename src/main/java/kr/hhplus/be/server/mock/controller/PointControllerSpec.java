@@ -1,4 +1,4 @@
-package kr.hhplus.be.server.controller;
+package kr.hhplus.be.server.mock.controller;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -7,8 +7,8 @@ import io.swagger.v3.oas.annotations.media.ExampleObject;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import kr.hhplus.be.server.common.ResponseApi;
-import kr.hhplus.be.server.controller.dto.MockPointDto;
+import kr.hhplus.be.server.app.common.CommonResponse;
+import kr.hhplus.be.server.mock.controller.dto.MockPointDto;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -43,7 +43,7 @@ public interface PointControllerSpec {
             }
     )
     @GetMapping("/balance")
-    ResponseApi<MockPointDto.PointBalanceResponseDto> getPointBalance(
+    CommonResponse<MockPointDto.PointBalanceResponseDto> getPointBalance(
             @Parameter(description = "사용자 ID", required = true)
             @PathVariable Long userId
     );
@@ -101,7 +101,7 @@ public interface PointControllerSpec {
             }
     )
     @PatchMapping("/charge")
-    ResponseApi<MockPointDto.PointBalanceResponseDto> chargePoint(
+    CommonResponse<MockPointDto.PointBalanceResponseDto> chargePoint(
             @Parameter(description = "사용자 ID", required = true)
             @PathVariable Long userId,
             @RequestBody MockPointDto.PointUpdateRequestDto request
@@ -160,7 +160,7 @@ public interface PointControllerSpec {
             }
     )
     @PatchMapping("/use")
-    ResponseApi<MockPointDto.PointBalanceResponseDto> usePoint(
+    CommonResponse<MockPointDto.PointBalanceResponseDto> usePoint(
             @Parameter(description = "사용자 ID", required = true)
             @PathVariable Long userId,
             @RequestBody MockPointDto.PointUpdateRequestDto request
@@ -190,7 +190,7 @@ public interface PointControllerSpec {
             }
     )
     @GetMapping("/history")
-    ResponseApi<List<MockPointDto.PointHistoryDto>> getPointHistory(
+    CommonResponse<List<MockPointDto.PointHistoryDto>> getPointHistory(
             @Parameter(description = "사용자 ID", required = true)
             @PathVariable Long userId
     );

@@ -1,4 +1,4 @@
-package kr.hhplus.be.server.controller;
+package kr.hhplus.be.server.mock.controller;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -6,8 +6,8 @@ import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.ExampleObject;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import kr.hhplus.be.server.common.ResponseApi;
-import kr.hhplus.be.server.controller.dto.MockProductDto;
+import kr.hhplus.be.server.app.common.CommonResponse;
+import kr.hhplus.be.server.mock.controller.dto.MockProductDto;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -25,7 +25,7 @@ public interface ProductControllerSpec {
             }
     )
     @GetMapping
-    ResponseApi<List<MockProductDto.ProductResponseDto>> getAllProducts();
+    CommonResponse<List<MockProductDto.ProductResponseDto>> getAllProducts();
 
     @Operation(
             summary = "상품 상세 조회",
@@ -51,7 +51,7 @@ public interface ProductControllerSpec {
             }
     )
     @GetMapping("/{productId}")
-    ResponseApi<MockProductDto.ProductResponseDto> getProductDetail(
+    CommonResponse<MockProductDto.ProductResponseDto> getProductDetail(
             @Parameter(description = "상품 ID", required = true)
             @PathVariable Long productId
     );
@@ -64,7 +64,7 @@ public interface ProductControllerSpec {
             }
     )
     @GetMapping("/popular")
-    ResponseApi<List<MockProductDto.PopularProductDto>> getPopularProducts(
+    CommonResponse<List<MockProductDto.PopularProductDto>> getPopularProducts(
             @Parameter(description = "조회 대상 기간 (일 단위)", example = "3")
             @RequestParam int days,
 

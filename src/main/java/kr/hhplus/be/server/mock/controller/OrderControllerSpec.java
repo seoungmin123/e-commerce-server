@@ -1,4 +1,4 @@
-package kr.hhplus.be.server.controller;
+package kr.hhplus.be.server.mock.controller;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -7,8 +7,8 @@ import io.swagger.v3.oas.annotations.media.ExampleObject;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import kr.hhplus.be.server.common.ResponseApi;
-import kr.hhplus.be.server.controller.dto.MockOrderDto;
+import kr.hhplus.be.server.app.common.CommonResponse;
+import kr.hhplus.be.server.mock.controller.dto.MockOrderDto;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -77,7 +77,7 @@ public interface OrderControllerSpec {
             }
     )
     @PostMapping("/orders")
-    ResponseApi<MockOrderDto.OrderSummaryResponseDto> createOrder(
+    CommonResponse<MockOrderDto.OrderSummaryResponseDto> createOrder(
             @RequestBody MockOrderDto.OrderRequestDto request
     );
 
@@ -105,7 +105,7 @@ public interface OrderControllerSpec {
             }
     )
     @GetMapping("/users/{userId}/orders")
-    ResponseApi<List<MockOrderDto.UserOrderSummaryDto>> getUserOrders(
+    CommonResponse<List<MockOrderDto.UserOrderSummaryDto>> getUserOrders(
             @Parameter(description = "사용자 ID", required = true)
             @PathVariable Long userId
     );
@@ -134,7 +134,7 @@ public interface OrderControllerSpec {
             }
     )
     @GetMapping("/orders/{orderId}")
-    ResponseApi<MockOrderDto.OrderDetailDto> getOrderDetail(
+    CommonResponse<MockOrderDto.OrderDetailDto> getOrderDetail(
             @Parameter(description = "주문 ID", required = true)
             @PathVariable Long orderId
     );
@@ -163,7 +163,7 @@ public interface OrderControllerSpec {
             }
     )
     @GetMapping("/orders/{orderId}/payment")
-    ResponseApi<MockOrderDto.OrderPaymentDto> getOrderPayment(
+    CommonResponse<MockOrderDto.OrderPaymentDto> getOrderPayment(
             @Parameter(description = "주문 ID", required = true)
             @PathVariable Long orderId
     );

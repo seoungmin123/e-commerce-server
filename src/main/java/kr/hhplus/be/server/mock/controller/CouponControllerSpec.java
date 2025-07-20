@@ -1,4 +1,4 @@
-package kr.hhplus.be.server.controller;
+package kr.hhplus.be.server.mock.controller;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -7,8 +7,8 @@ import io.swagger.v3.oas.annotations.media.ExampleObject;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import kr.hhplus.be.server.common.ResponseApi;
-import kr.hhplus.be.server.controller.dto.MockCouponDto;
+import kr.hhplus.be.server.app.common.CommonResponse;
+import kr.hhplus.be.server.mock.controller.dto.MockCouponDto;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 
@@ -53,7 +53,7 @@ public interface CouponControllerSpec {
                     )
             )
     })
-    ResponseApi<MockCouponDto.IssuedCouponResponseDto> issueCoupon(
+    CommonResponse<MockCouponDto.IssuedCouponResponseDto> issueCoupon(
             @Parameter(description = "사용자 ID", required = true)
             @PathVariable Long userId,
             @RequestBody MockCouponDto.IssueCouponRequestDto request
@@ -79,7 +79,7 @@ public interface CouponControllerSpec {
                     )
             )
     })
-    ResponseApi<List<MockCouponDto.IssuedCouponResponseDto>> getUserCoupons(
+    CommonResponse<List<MockCouponDto.IssuedCouponResponseDto>> getUserCoupons(
             @Parameter(description = "사용자 ID", required = true)
             @PathVariable Long userId
     );
@@ -104,7 +104,7 @@ public interface CouponControllerSpec {
                     )
             )
     })
-    ResponseApi<MockCouponDto.CouponAvailableResponseDto> checkCouponAvailable(
+    CommonResponse<MockCouponDto.CouponAvailableResponseDto> checkCouponAvailable(
             @Parameter(description = "사용자 ID", required = true)
             @PathVariable Long userId,
             @Parameter(description = "쿠폰 ID", required = true)

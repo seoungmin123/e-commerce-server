@@ -1,4 +1,4 @@
-package kr.hhplus.be.server.controller.external;
+package kr.hhplus.be.server.mock.controller.external;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -6,8 +6,8 @@ import io.swagger.v3.oas.annotations.media.ExampleObject;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import kr.hhplus.be.server.common.ResponseApi;
-import kr.hhplus.be.server.controller.dto.MockExternalOrderDto;
+import kr.hhplus.be.server.app.common.CommonResponse;
+import kr.hhplus.be.server.mock.controller.dto.MockExternalOrderDto;
 import org.springframework.web.bind.annotation.RequestBody;
 
 @Tag(name = "외부 주문 연동", description = "외부 시스템과 주문 연동 처리")
@@ -78,7 +78,7 @@ public interface ExternalOrderControllerSpec {
                     )
             }
     )
-    public ResponseApi<Void> sendOrderToExternal(
+    public CommonResponse<Void> sendOrderToExternal(
             @RequestBody MockExternalOrderDto.ExternalOrderRequestDto request
     );
 }
