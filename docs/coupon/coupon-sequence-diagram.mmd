@@ -1,0 +1,27 @@
+%%  (Optimistic Lock 고려)
+sequenceDiagram
+    participant User
+    participant 쿠폰 컨트롤러
+    participant 쿠폰 서비스
+    participant 쿠폰 레파지토리
+    participant 쿠폰발급 레파지토리
+
+    User->>쿠폰 컨트롤러: 쿠폰 발급 요청
+    쿠폰 컨트롤러->>쿠폰 서비스: issueCoupon(userId, couponId)
+
+    쿠폰 서비스->>쿠폰 레파지토리: findById(couponId)
+    Note over 쿠폰 서비스: @Version 기반으로 쿠폰 조회
+
+    alt 수량 있음
+        쿠폰 서비스->>쿠폰 레파지토리: decreaseStock(couponId)
+        alt 버전 충돌 없음
+            쿠폰 서비스->>쿠폰발급 레파지토리: save(userId, couponId)
+            쿠폰 서비스-->>쿠폰 컨트롤러: 발급 성공
+        else OptimisticLockException 발생
+            쿠폰 서비스-->>쿠폰 컨트롤러: 실패 (동시 발급 충돌)
+        end
+    else 수량 없음
+        쿠폰 서비스-->>쿠폰 컨트롤러: 수량 소진 응답
+    end
+
+    쿠폰 컨트롤러-->>User: 최종 응답 반환
