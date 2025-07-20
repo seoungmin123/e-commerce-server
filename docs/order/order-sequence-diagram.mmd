@@ -1,0 +1,49 @@
+sequenceDiagram
+    participant Client
+    participant Order
+    participant Product
+    participant Coupon
+    participant User
+    participant OrderItem
+    participant OrderPayment
+    participant ExternalSystem
+
+    Note over Order: 트랜잭션 시작 (@Transactional)
+
+    Client->>Order: 주문요청(userId, List<OrderItemRequest>, couponId)
+
+%% 재고 확보
+    Order->>Product: 재고확보(productId) (Pessimistic Lock)
+    Order->>Product: 재고차감(cnt)
+
+%% 주문 객체 생성 + 상태값 CREATED
+    Order->>Order: createOrder(userId)
+    Order->>Order: updateStatus(CREATED)
+
+%% 쿠폰 처리
+    alt 쿠폰 사용
+        Order->>Coupon: 쿠폰사용처리()
+        Coupon->>Coupon: markAsUsed()
+    end
+
+%% 포인트 차감
+    Order->>User: 포인트차감(amount) (Optimistic Lock)
+    User->>User: updateBalance(-amount)
+
+%% 상태값 PAID
+    Order->>Order: updateStatus(PAID)
+
+%% 주문 구성
+    Order->>OrderItem: 주문상품생성(productId, cnt)
+    Order->>OrderPayment: 결제정보생성(총금액, 할인금액, 결제금액)
+
+%% 최종 완료 상태  + 상태값 COMPLETED
+    Order->>Order: updateStatus(COMPLETED)
+
+    Note over Order: 트랜잭션 종료 (커밋 or 롤백)
+    Order-->>Client: 주문 완료 응답
+
+%% 트랜잭션 이후 외부 시스템 전송
+    Note over Order: 주문 완료 후 후처리 (비동기 가능)
+    Order->>ExternalSystem: 주문정보 전송 (orderId, userId, 금액 등)
+    ExternalSystem-->>Order: 전송 성공 or 실패 응답 (Mock)
