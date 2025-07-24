@@ -1,4 +1,4 @@
-package kr.hhplus.be.server.mock.controller.dto;
+package kr.hhplus.be.server.couponPolicy.domain;
 
 
 public enum CouponReason {
