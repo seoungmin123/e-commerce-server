@@ -5,6 +5,9 @@ import kr.hhplus.be.server.user.dto.PointBalanceDto;
 import kr.hhplus.be.server.user.dto.PointChargeRequestDto;
 import kr.hhplus.be.server.user.dto.PointUseRequestDto;
 
+import static org.mockito.ArgumentMatchers.anyLong;
+import static org.mockito.Mockito.*;
+
 public class UserFixture {
 
     // 가장 기본적인 유저
@@ -27,6 +30,15 @@ public class UserFixture {
 
     public static PointBalanceDto balanceOf(Long userId, long amount) {
         return new PointBalanceDto(userId, amount);
+    }
+
+    // 포인트 부족한 유저
+    public static User userWithInsufficientPoint() {
+        User user = mock(User.class);
+        when(user.getUserId()).thenReturn(1L);
+        doThrow(new IllegalArgumentException("포인트 부족"))
+                .when(user).usePoint(anyLong());
+        return user;
     }
 
 }

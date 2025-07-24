@@ -5,6 +5,8 @@ import kr.hhplus.be.server.product.dto.PopularProductResponseDto;
 import kr.hhplus.be.server.product.reader.ProductReader;
 import org.springframework.test.util.ReflectionTestUtils;
 
+import static org.mockito.Mockito.*;
+
 public class ProductFixture {
 
     public static Product create(Long id, String name, Long price) {
@@ -41,5 +43,20 @@ public class ProductFixture {
 
     public static PopularProductResponseDto 인기상품응답(ProductSalesDto dto, ProductReader reader) {
         return PopularProductResponseDto.from(dto, reader);
+    }
+
+    public static Product productWithStock(long stock) {
+        Product product = mock(Product.class);
+        when(product.getProductId()).thenReturn(1L);
+        when(product.getName()).thenReturn("테스트상품");
+        doNothing().when(product).deductStock(anyInt());
+        return product;
+    }
+
+    public static Product productWithId(Long id) {
+        Product product = mock(Product.class);
+        when(product.getProductId()).thenReturn(id);
+        when(product.getName()).thenReturn("테스트상품");
+        return product;
     }
 }
