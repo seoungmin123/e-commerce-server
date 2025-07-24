@@ -2,6 +2,7 @@ package kr.hhplus.be.server.user.controller;
 
 import kr.hhplus.be.server.common.response.ApiResponse;
 import kr.hhplus.be.server.common.response.ApiResponseCode;
+import kr.hhplus.be.server.user.controller.swagger.UserSwaggerDocs;
 import kr.hhplus.be.server.user.dto.PointBalanceDto;
 import kr.hhplus.be.server.user.dto.PointChargeRequestDto;
 import kr.hhplus.be.server.user.dto.PointUseRequestDto;
@@ -16,7 +17,7 @@ import java.util.List;
 @RestController
 @RequestMapping("/user")
 @RequiredArgsConstructor
-public class UserController  {
+public class UserController implements UserSwaggerDocs {
 
     private final UserService userService;
     private final UserPointFacade userPointFacade;
