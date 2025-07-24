@@ -1,35 +1,16 @@
 spring:
-  application:
-    name: hhplus
-  profiles:
-    active: local
   datasource:
-    name: HangHaePlusDataSource
-    type: com.zaxxer.hikari.HikariDataSource
-    hikari:
-      maximum-pool-size: 3
-      connection-timeout: 10000
-      max-lifetime: 60000
-    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:h2:mem:testdb;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE
+    driver-class-name: org.h2.Driver
+    username: sa
+    password:
+  h2:
+    console:
+      enabled: true
   jpa:
-    open-in-view: false
-    generate-ddl: false
-    show-sql: false
     hibernate:
-      ddl-auto: none
+      ddl-auto: create-drop # 또는 update (test면 create-drop 추천)
+    show-sql: true
     properties:
-      hibernate.timezone.default_storage: NORMALIZE_UTC
-      hibernate.jdbc.time_zone: UTC
-
----
-spring.config.activate.on-profile: local, test
-
-spring:
-  datasource:
-    url: jdbc:mysql://localhost:3306/hhplus?characterEncoding=UTF-8&serverTimezone=UTC
-    username: root
-    password: DLtmdals0106!!!
-
-springdoc:
-  swagger-ui:
-    path: /swagger-ui.html
+      hibernate:
+        format_sql: true
