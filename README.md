@@ -29,11 +29,75 @@ kr.hhplus.be.server
 ├── couponpolicy   → 쿠폰 정책
 ├── product        → 상품
 ├── order          → 주문, 주문 상세, 결제 내역
-├── external       → 외부 주문 연동
+├── infra.external.order       → 외부 주문 연동
 ```
 
 * 각 도메인은 `controller`, `service`, `domain`, `dto`, `reader`, `facade` 구조로 분리
 * 도메인 패키지 안에 `@Entity`와 `JpaRepository` 포함하여 응집도 유지
+
+---
+
+###  2️⃣-1️⃣  전체 요청 처리 흐름
+
+프로젝트는 도메인 중심 계층 구조를 따르며, 각 요청은 다음과 같은 흐름으로 처리
+
+```
+Controller → (Facade) → Service → Reader → Repository → Domain
+                                    ↘︎        ↑
+                                     → 다른 Service / Facade (필요 시)
+```
+
+#### 각 계층의 역할
+
+| 계층           | 설명                                 |
+| ------------ | ---------------------------------- |
+| `Controller` | 외부 API 요청 진입 지점. 파라미터 처리 및 응답 반환   |
+| `Facade`     | 복합 도메인 로직 조율. 여러 Service 호출 조합     |
+| `Service`    | 단일 도메인 비즈니스 로직 처리                  |
+| `Reader`     | 읽기 전용 조회 인터페이스. 도메인 간 직접 참조 방지     |
+| `Repository` | JPA 기반 데이터 접근 계층                   |
+| `Domain`     | 상태와 행위를 가지는 핵심 비즈니스 모델 (@Entity 등) |
+
+---
+
+#### 🎫 쿠폰 발급 흐름
+
+```
+CouponController
+ → CouponPolicyFacade (쿠폰 발급 전체 흐름)
+    → CouponPolicyReader (쿠폰 정책 조회)
+    → UserReader (유저 조회)
+    → CouponPolicy (도메인에서 수량 차감)
+    → CouponService (쿠폰 생성 및 저장)
+        → Coupon (도메인 객체 생성)
+        → CouponRepository (쿠폰 영속화)
+    → CouponResponseDto (응답 변환)
+
+```
+
+#### 🛒 주문 생성 흐름
+
+```
+OrderController
+ → OrderFacade(주문 요청 전체 흐름)
+    → UserReader (유저 조회)
+    → ProductReader (재고 조회 및 차감)
+    → CouponReader (쿠폰 조회)
+    → CouponPolicyReader (할인율 조회)
+    → OrderService (주문 + 결제 저장)
+    → ExternalOrderSender (외부 전송)
+
+```
+
+---
+
+#### 💡 설계 의도
+
+* `Facade`: 도메인 간 흐름을 명확히 분리해 책임 집중
+* `Reader`: 읽기 의존을 명시적으로 관리해 결합도 최소화
+* `Service`: 도메인 단위의 비즈니스 책임 분리
+
+
 
 ---
 
