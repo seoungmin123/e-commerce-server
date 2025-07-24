@@ -1,4 +1,4 @@
-package kr.hhplus.be.server.mock.controller.dto;
+package kr.hhplus.be.server.pointHistory.domain;
 /**
  * 포인트 이력 유형
  */
