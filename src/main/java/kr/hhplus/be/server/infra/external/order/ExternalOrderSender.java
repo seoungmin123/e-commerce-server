@@ -4,7 +4,9 @@ package kr.hhplus.be.server.infra.external.order;
 import kr.hhplus.be.server.common.exception.ApiControllerAdvice;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.stereotype.Component;
 
+@Component
 public class ExternalOrderSender {
 
     private static final Logger log = LoggerFactory.getLogger(ApiControllerAdvice.class);
