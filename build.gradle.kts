@@ -30,22 +30,24 @@ dependencyManagement {
 }
 
 dependencies {
-    // Spring
+	// Spring
 	implementation("org.springframework.boot:spring-boot-starter-actuator")
 	implementation("org.springframework.boot:spring-boot-starter-data-jpa")
 	implementation("org.springframework.boot:spring-boot-starter-web")
 
-    // DB
+	// DB
 	runtimeOnly("com.mysql:mysql-connector-j")
 
-    // Test
-    testImplementation("org.springframework.boot:spring-boot-starter-test")
-	testImplementation("org.springframework.boot:spring-boot-testcontainers")
-	testImplementation("org.testcontainers:junit-jupiter")
-	testImplementation("org.testcontainers:mysql")
+	// Test
+	testImplementation("org.springframework.boot:spring-boot-starter-test")
+//	testImplementation("org.springframework.boot:spring-boot-testcontainers")
+//	testImplementation("org.testcontainers:junit-jupiter")
+//	testImplementation("org.testcontainers:mysql")
+	testImplementation ("com.fasterxml.jackson.core:jackson-databind")
+
 	testRuntimeOnly("org.junit.platform:junit-platform-launcher")
 
-	// Lombok (컴파일 시 처리)
+	// Lombok
 	compileOnly("org.projectlombok:lombok")
 	annotationProcessor("org.projectlombok:lombok")
 	testCompileOnly("org.projectlombok:lombok")
@@ -53,6 +55,12 @@ dependencies {
 
 	// swagger
 	implementation("org.springdoc:springdoc-openapi-starter-webmvc-ui:2.8.6")
+
+	//H2
+	runtimeOnly("com.h2database:h2")
+
+	//어노테이션
+	implementation("org.jetbrains:annotations:24.0.0")
 }
 
 tasks.withType<Test> {

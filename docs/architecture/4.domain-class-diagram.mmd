@@ -3,9 +3,9 @@ classDiagram
 
     class User {
         Long userId
-        Long 보유포인트
-        LocalDateTime 가입일시
-        Long version //Optimistic Lock용
+        Long point // 보유포인트
+        LocalDateTime createdDt // 가입일시
+        Long version // Optimistic Lock용
         +포인트잔액조회(userId)
         +포인트충전(userId, amount)
         +포인트차감(userId, amount)
@@ -16,18 +16,18 @@ classDiagram
         Long userId
         Long amount
         Long balanceAfter
-        PointType 타입
-        LocalDateTime 생성일시
+        PointType type // 타입
+        LocalDateTime createdDt // 생성일시
         +포인트이력조회(userId)
-        +포인트이력저장(userId,이력타입,일시,amount, balanceAfter)
+        +포인트이력저장(userId, 이력타입, 일시, amount, balanceAfter)
     }
 
     class Order {
         Long orderId
         Long userId
-        Long 결제금액
-        OrderStatus 상태
-        LocalDateTime 주문일시
+        Long totalPrice // 결제금액
+        OrderStatus status // 상태
+        LocalDateTime orderedDt // 주문일시
         +주문요청(userId, List<OrderItemRequest>, couponId)
         +결제확인(orderId)
         +주문내역조회(userId)
@@ -37,11 +37,12 @@ classDiagram
         Long orderItemId
         Long orderId
         Long productId
-        Long item_cnt
-        Long 상품단일가격
-        Long 총가격
-        OrderStatus 상태
-        LocalDateTime 주문일시
+        String product_name
+        Long quantity // 수량
+        Long unitPrice // 상품단일가격
+        Long totalPrice // 총가격
+        OrderStatus status // 상태
+        LocalDateTime orderedDt // 주문일시
         +주문상세조회(orderId)
         +인기상품조회(몇개자를지 , 날짜)
     }
@@ -50,45 +51,44 @@ classDiagram
         Long orderPaymentId
         Long orderId
         Long couponId
-        Long 총_원가_금액
-        Long 할인_금액
-        Long 총_결제_금액
-        LocalDateTime 결제일시
+        Long originalPrice // 총_원가_금액
+        Long discountAmount // 할인_금액
+        Long finalPrice // 총_결제_금액
+        LocalDateTime paidDt // 결제일시
         +주문결제내역조회(orderId)
     }
 
     class Product {
         Long productId
-        String 상품명
-        Long 가격
-        Long 재고
+        String name // 상품명
+        Long price // 가격
+        Long stock // 재고
         +제품전체조회()
         +제품상세조회(productId)
     }
 
     class CouponPolicy {
         Long couponPolicyId
-        String 쿠폰명
-        Long 할인율
-        Long 총 발급수량
-        Long 잔여수량
-        Integer 쿠폰유효기간_일수 // 1,7,10일...
-        Long version //Optimistic Lock용
+        String name // 쿠폰명
+        Long discountRate // 할인율
+        Long issuedTotal // 총 발급수량
+        Long issuedRemain // 잔여수량
+        Integer expiredDays // 쿠폰유효기간_일수
+        Long version // Optimistic Lock용
         +발급가능_여부확인(couponId)
         -쿠폰발급시_수량감소(couponId)
         +선착순쿠폰발급(userId)
-         %% 동일 정책에 대해 중복 발급 방지 (userId + couponPolicyId UNIQUE)
     }
 
     class Coupon {
         Long couponId
-        Long CouponPolicyId
+        Long couponPolicyId
         Long userId
-        String 쿠폰명//최적화용
-        Long 할인율 //최적화용
-        LocalDateTime 발급일시
-        LocalDateTime 사용일시
-        LocalDateTime 만료일시(정책의 유효기간 기준으로 계산)
+        String name // 쿠폰명 최적화용
+        Long discountRate // 할인율 최적화용
+        LocalDateTime issuedDt // 발급일시
+        LocalDateTime usedDt // 사용일시
+        LocalDateTime expiredDt // 만료일시
         Boolean isUsed
         +보유쿠폰조회(userId)
         +쿠폰사용가능조회(userId, couponId)
@@ -112,7 +112,6 @@ classDiagram
         +send(orderId, userId, totalAmount, List<OrderItem>)
     }
 
-
 %% 관계
     User           --> PointHistory : 포인트이력보유
     User           --> Order        : 주문함
@@ -124,4 +123,4 @@ classDiagram
     PointHistory   --> PointType
     Order          --> OrderStatus : 상태관리
     Order          --> ExternalOrderSender : 외부전송
-%%OrderItem      --> OrderStatus : 상태관리
+OrderItem      --> OrderStatus : 상태관리
